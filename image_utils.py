@@ -1,30 +1,31 @@
 from PIL import Image
 import numpy as np
-from scipy.signal import convolve2d
+from scipy.signal import convolve2d  # שימוש בפונקציה הנכונה
 
 def load_image(path):
+    """Load an image and convert it to a NumPy array."""
     img = Image.open(path)  # Open the image
-    img_array = np.array(img)    # Convert image to a NumPy array
+    img_array = np.array(img)  # Convert image to a NumPy array
     return img_array
 
 def edge_detection(image):
-    # 1. המרת התמונה לאפור (גרייסקייל) ע"י ממוצע של 3 הערוצים (RGB)
+    # 1. Convert image to grayscale
     grayscale = np.mean(image, axis=2)
 
-    # 2. יצירת מסננים לזיהוי גבולות
+    # 2. Define Sobel filters for edge detection
     kernelY = np.array([[ 1,  2,  1],
-                         [ 0,  0,  0],
-                         [-1, -2, -1]])  # Vertical edges
+                        [ 0,  0,  0],
+                        [-1, -2, -1]])  # Vertical edges
 
     kernelX = np.array([[-1,  0,  1],
-                         [-2,  0,  2],
-                         [-1,  0,  1]])  # Horizontal edges
+                        [-2,  0,  2],
+                        [-1,  0,  1]])  # Horizontal edges
 
-    # 3. קונבולוציה של המסננים על התמונה האפורה
-    edgeX = convolve(grayscale, kernelX, mode='constant', cval=0.0)  # Horizontal edges
-    edgeY = convolve(grayscale, kernelY, mode='constant', cval=0.0)  # Vertical edges
+    # 3. Apply convolution using convolve2d
+    edgeX = convolve2d(grayscale, kernelX, mode='same', boundary='fill', fillvalue=0)  # Horizontal edges
+    edgeY = convolve2d(grayscale, kernelY, mode='same', boundary='fill', fillvalue=0)  # Vertical edges
 
-    # 4. חישוב גודל הגבול
+    # 4. Compute the edge magnitude
     edgeMAG = np.sqrt(edgeX**2 + edgeY**2)
 
-    return edgeMAG  # מחזירים את התמונה עם הגבולות
+    return edgeMAG  # Return the edge-detected image
