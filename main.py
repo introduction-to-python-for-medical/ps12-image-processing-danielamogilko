@@ -6,7 +6,7 @@ from skimage.morphology import ball
 from image_utils import load_image, edge_detection
 
 # 1. טעינת התמונה המקורית
-image_path = "path/to/your/image.jpg"  # יש לשנות לנתיב לתמונה שלך
+image_path = "DALL-E_2025-01-29_20.32.41.webp"  # יש לשנות לנתיב לתמונה שלך
 image = load_image(image_path)
 
 # 2. הפחתת רעשים באמצעות פילטר מדיאן
